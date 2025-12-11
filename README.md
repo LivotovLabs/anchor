@@ -83,7 +83,7 @@ We believe in sustainable open source.
 ---
 
 ### License
-Copyright © 2025 **LivotovLabs**.
+Copyright © 2025 **[LivotovLabs](https://labs.livotov.eu)**.
 
 Licensed under the **Apache License, Version 2.0** (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
 
