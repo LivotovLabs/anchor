@@ -56,9 +56,9 @@ Anchor.start(config).collect { location ->
 We are building in public. Here is our progress:
 
 - [x] **Project Setup & Architecture** (Gradle, KMP, CI/CD)
-- [ ] **Android Core** (FusedLocationProvider + Foreground Service)
-- [ ] **iOS Core** (CLLocationManager + Background Modes)
-- [ ] **Permission Handler** (Unified API for Android/iOS)
+- [x] **Android Core** (FusedLocationProvider + Foreground Service)
+- [x] **iOS Core** (CLLocationManager + Background Modes)
+- [x] **Permission Handler** (Unified API for Android/iOS)
 - [ ] **Pro Features** (SQLite Buffering & Auto-Sync)
 - [ ] **Documentation Website**
 - [ ] **Maven Central Release**
