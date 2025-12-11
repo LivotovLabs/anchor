@@ -19,7 +19,7 @@ We are building the first **native KMP** alternative to legacy wrappers. No Cord
 
 Background location on mobile is broken. Existing libraries are often:
 1.  **Expensive:** Charging $300+ per app for basic features.
-2.  **Outdated:** Wrapping 5-year-old Objective-C code or reliance on hybrid bridges.
+2.  **Outdated:** Wrapping 5-year-old Objective-C code or relying on hybrid bridges.
 3.  **Fragile:** Failing to restart when the OS kills the background service.
 
 **Anchor** solves this with a modern, reactive architecture built on Coroutines and Flow.
@@ -47,3 +47,46 @@ Anchor.start(config).collect { location ->
     println("Lat: ${location.latitude}, Lon: ${location.longitude}")
     println("Speed: ${location.speed}, Altitude: ${location.altitude}")
 }
+```
+
+---
+
+## 🗺️ Roadmap to v1.0
+
+We are building in public. Here is our progress:
+
+- [x] **Project Setup & Architecture** (Gradle, KMP, CI/CD)
+- [ ] **Android Core** (FusedLocationProvider + Foreground Service)
+- [ ] **iOS Core** (CLLocationManager + Background Modes)
+- [ ] **Permission Handler** (Unified API for Android/iOS)
+- [ ] **Pro Features** (SQLite Buffering & Auto-Sync)
+- [ ] **Documentation Website**
+- [ ] **Maven Central Release**
+
+---
+
+## 💎 The Business Model (Transparency)
+
+We believe in sustainable open source.
+
+1.  **Anchor Core (Apache 2.0):** Free, Open Source. Unlimited real-time tracking, background service management, and permission handling.
+2.  **Anchor Pro (Commercial):** Will include "heavy lifting" features like built-in SQLite persistence, Auto-Sync to HTTP endpoints, and Motion Activity Intelligence to save battery.
+
+---
+
+## 📩 Get Updates
+
+*   ⭐ **Star this repo** to show support and boost visibility.
+*   👀 **Watch this repo** to be notified of the Beta release.
+*   Visit **[anchorkmp.io](https://anchorkmp.io)** to sign up for the waitlist.
+
+---
+
+### License
+Copyright © 2025 **LivotovLabs**.
+
+Licensed under the **Apache License, Version 2.0** (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. S
