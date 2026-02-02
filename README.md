@@ -1,92 +1,193 @@
-# ⚓ Anchor: KMP Background Location
+<div align="center">
+  <h1>⚓️ Anchor</h1>
+  <h3>Background Geolocation for Kotlin Multiplatform</h3>
+  
+  <p>
+    <b>Reliable. Battery-Conscious. Native Performance.</b>
+  </p>
 
-[![Status](https://img.shields.io/badge/status-in%20development-orange)](https://github.com/LivotovLabs/anchor)
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-[![Platform](https://img.shields.io/badge/platform-android%20|%20ios-lightgrey)](https://anchorkmp.io)
+  [![Maven Central](https://img.shields.io/maven-central/v/io.anchorkmp/core?style=flat-square&color=blue)](https://central.sonatype.com/artifact/io.anchorkmp/core)
+  [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=flat-square)](https://opensource.org/licenses/Apache-2.0)
+  [![Platform](https://img.shields.io/badge/platform-android%20|%20ios-lightgrey?style=flat-square)](https://anchorkmp.io)
+  [![Status](https://img.shields.io/badge/status-alpha-orange?style=flat-square)](https://github.com/LivotovLabs/anchor)
 
-> 🚧 **Work In Progress:** Anchor is currently under active development.
-> **[Watch this repository](https://github.com/LivotovLabs/anchor/subscription)** to get notified when v1.0.0 drops.
+  <br/>
+  
+  <a href="https://anchorkmp.io"><strong>Website</strong></a> · 
+  <a href="#-installation"><strong>Installation</strong></a> · 
+  <a href="#-demo-application"><strong>Demo App</strong></a>
+</div>
 
-**Anchor** is a robust, battery-conscious background geolocation library built specifically for **Kotlin Multiplatform**.
+<br/>
 
-We are building the first **native KMP** alternative to legacy wrappers. No Cordova bridges. No React Native JSON passing. Just pure Kotlin and Swift performance for modern Android & iOS apps.
-
-[**Website**](https://anchorkmp.io) | [**Roadmap**](#-roadmap)
+> **Anchor** is a native, Kotlin-first background geolocation library for **Kotlin Multiplatform**, designed for high performance and seamless integration in modern Android and iOS applications.
+>
+> ⚠️ **Note:** The product is currently in its final stages of development and testing. The official **v1.0 release** is expected during **February 2026**.
 
 ---
 
-## ⚡ The Problem We Are Solving
+## ✨ Features
 
-Background location on mobile is broken. Existing libraries are often:
-1.  **Expensive:** Charging $300+ per app for basic features.
-2.  **Outdated:** Wrapping 5-year-old Objective-C code or relying on hybrid bridges.
-3.  **Fragile:** Failing to restart when the OS kills the background service.
-
-**Anchor** solves this with a modern, reactive architecture built on Coroutines and Flow.
+- 🔋 **Always Background:** Architected specifically for reliable, long-running background tracking.
+- 🎯 **Platform Tuned:** Granular control over Android Priority/Interval and iOS Accuracy/Activity Type.
+- 🚀 **Modern API:** Built with Kotlin DSL, Coroutines, and Flow.
+- 📱 **Cross-Platform:** Single shared API for Android and iOS.
 
 ---
 
-## 🔮 API Preview (Design Draft)
+## 📦 Installation
 
-This is how you will use Anchor when v1.0 launches. We are designing for Type-Safety and clean architecture.
+Add the dependency to your `commonMain` source set in `build.gradle.kts`:
 
 ```kotlin
-// 1. Configure
-val config = AnchorConfig(
-    interval = 10.seconds,        // Update frequency
-    accuracy = Accuracy.HIGH,     // GPS Priority
-    stopOnTerminate = false,      // Keep tracking if app is killed
-    notification = NotificationConfig(
-        title = "Tracking Active",
-        text = "Recording your location..."
-    )
-)
-
-// 2. Collect (No Callback Hell)
-Anchor.start(config).collect { location ->
-    println("Lat: ${location.latitude}, Lon: ${location.longitude}")
-    println("Speed: ${location.speed}, Altitude: ${location.altitude}")
+commonMain.dependencies {
+    implementation("io.anchorkmp:core:0.0.1")
 }
 ```
 
 ---
 
-## 🗺️ Roadmap to v1.0
+## 🛠 Platform Setup
 
-We are building in public. Here is our progress:
+<details>
+<summary><strong>🤖 Android Setup</strong></summary>
 
-- [x] **Project Setup & Architecture** (Gradle, KMP, CI/CD)
-- [x] **Android Core** (FusedLocationProvider + Foreground Service)
-- [x] **iOS Core** (CLLocationManager + Background Modes)
-- [x] **Permission Handler** (Unified API for Android/iOS)
-- [ ] **Pro Features** (SQLite Buffering & Auto-Sync)
-- [ ] **Documentation Website**
-- [ ] **Maven Central Release**
+No manual initialization code is required. However, you must declare the foreground service type in your manifest if you are targeting Android 14+.
+
+The library automatically includes the following permissions:
+- `ACCESS_COARSE_LOCATION`
+- `ACCESS_FINE_LOCATION`
+- `ACCESS_BACKGROUND_LOCATION`
+- `FOREGROUND_SERVICE_LOCATION`
+- `POST_NOTIFICATIONS`
+- `ACTIVITY_RECOGNITION`
+
+</details>
+
+<details>
+<summary><strong>🍎 iOS Setup</strong></summary>
+
+Add the following keys to your `Info.plist` (typically in `iosApp/iosApp/Info.plist`):
+
+```xml
+<!-- Location Permissions -->
+<key>NSLocationWhenInUseUsageDescription</key>
+<string>We need your location to track your journey.</string>
+<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+<string>We need your location to track your journey even in the background.</string>
+<key>NSLocationAlwaysUsageDescription</key>
+<string>We need your location to track your journey even in the background.</string>
+
+<!-- Motion Permission (for Activity Recognition) -->
+<key>NSMotionUsageDescription</key>
+<string>We need access to motion data to detect if you are walking, running, or driving.</string>
+
+<!-- Background Modes -->
+<key>UIBackgroundModes</key>
+<array>
+    <string>location</string>
+    <string>fetch</string>
+    <string>processing</string>
+</array>
+```
+</details>
 
 ---
 
-## 💎 The Business Model (Transparency)
+## 🚀 Quick Start
 
-We believe in sustainable open source.
+### 1. Configuration
 
-1.  **Anchor Core (Apache 2.0):** Free, Open Source. Unlimited real-time tracking, background service management, and permission handling.
-2.  **Anchor Pro (Commercial):** Will include "heavy lifting" features like built-in SQLite persistence, Auto-Sync to HTTP endpoints, and Motion Activity Intelligence to save battery.
+Initialize Anchor in your application startup logic.
+
+```kotlin
+import io.anchorkmp.core.*
+import kotlin.time.Duration.Companion.seconds
+
+val config = AnchorConfig.build {
+    // Shared Options
+    trackActivity = true            // Enable activity recognition (walking, driving, etc.)
+    minUpdateDistanceMeters = 10.0  // Minimum distance before an update is triggered
+
+    // Android Specifics
+    android {
+        updateInterval = 10.seconds          // Desired frequency of updates
+        priority = AndroidPriority.BALANCED  // Balance between battery and accuracy
+        
+        notification {
+            title = "Tracking Active"        // Persistent notification title
+            body = "Location tracking is on" // Persistent notification body
+            iconName = "ic_tracker"          // Drawable resource name
+        }
+    }
+    
+    // iOS Specifics
+    ios {
+        desiredAccuracy = IosAccuracy.BEST   // kCLLocationAccuracyBest
+        autoPause = true                     // Allow system to pause updates to save battery
+        activityType = IosActivityType.OTHER // CLActivityType
+        displayBackgroundLocationIndicator = true // Show blue pill in status bar
+    }
+}
+
+Anchor.init(config)
+```
+
+### 2. Permissions & Tracking
+
+Anchor provides a simple coroutine-based API for permission management.
+
+```kotlin
+scope.launch {
+    // 1. Request permissions (suspends until user decides)
+    // Suggest asking for Notifications & Motion first
+    Anchor.requestPermission(PermissionScope.NOTIFICATIONS)
+    Anchor.requestPermission(PermissionScope.MOTION)
+
+    // 2. Request Background Location
+    val status = Anchor.requestPermission(PermissionScope.BACKGROUND)
+    
+    if (status == PermissionStatus.GRANTED) {
+        // 3. Start Tracking
+        Anchor.startTracking()
+    } else {
+        println("Permission denied")
+    }
+}
+```
+
+### 3. Observe Updates
+
+```kotlin
+scope.launch {
+    Anchor.locationFlow.collect { location ->
+        println("📍 Location: ${location.latitude}, ${location.longitude}")
+        println("🏃 Activity: ${location.activity}")
+    }
+}
+```
 
 ---
 
-## 📩 Get Updates
+## 📱 Demo Application
 
-*   ⭐ **Star this repo** to show support and boost visibility.
-*   👀 **Watch this repo** to be notified of the Beta release.
-*   Visit **[anchorkmp.io](https://anchorkmp.io)** to sign up for the waitlist.
+Check out the `sample/` directory for a complete Compose Multiplatform app demonstrating background tracking and native maps.
+
+### Running on Android
+1. Create `local.properties` in the project root.
+2. Add your Google Maps API Key: `MAPS_API_KEY=AIzaSy...`
+3. Run: `./gradlew :sample:composeApp:installDebug`
+
+### Running on iOS
+1. Open `sample/iosApp/iosApp.xcodeproj` in Xcode.
+2. Select your target device and run. (Uses native Apple Maps, no key required).
 
 ---
 
-### License
-Copyright © 2025 **[LivotovLabs](https://labs.livotov.eu)**.
-
-Licensed under the **Apache License, Version 2.0** (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
-
-http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. S
+<div align="center">
+  <p>
+    Licensed under <a href="LICENSE">Apache 2.0</a>.
+    <br/>
+    Built with ❤️ by <a href="https://github.com/LivotovLabs">Livotov Labs</a>.
+  </p>
+</div>
