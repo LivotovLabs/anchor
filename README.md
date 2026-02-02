@@ -1,6 +1,21 @@
 # Anchor KMP Core
 
-Anchor KMP Core is a Kotlin Multiplatform library for efficient and customizable background geolocation tracking on Android and iOS.
+# ⚓ Anchor: KMP Background Geolocation
+
+[![Status](https://img.shields.io/badge/status-in%20development-orange)](https://github.com/LivotovLabs/anchor)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![Platform](https://img.shields.io/badge/platform-android%20|%20ios-lightgrey)](https://anchorkmp.io)
+
+> 🚧 **Work In Progress:** Anchor is currently under active development.
+> **[Watch this repository](https://github.com/LivotovLabs/anchor/subscription)** to get notified when v1.0.0 drops.
+
+**Anchor** is a robust, battery-conscious background geolocation library built specifically for **Kotlin Multiplatform**.
+
+We are building the first **native KMP** alternative to legacy wrappers. No Cordova bridges. No React Native JSON passing. 
+Just pure Kotlin and Swift performance for modern Android & iOS apps.
+
+[**Website**](https://anchorkmp.io) | [**Roadmap**](#-roadmap)
+
 
 ## Features
 
