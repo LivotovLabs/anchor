@@ -33,6 +33,14 @@ internal actual fun platformPermissionCheck(scope: PermissionScope): PermissionS
         }
         return PermissionStatus.GRANTED
     }
+    
+    if (scope == PermissionScope.MOTION) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            val hasActivity = ContextCompat.checkSelfPermission(context, Manifest.permission.ACTIVITY_RECOGNITION) == PackageManager.PERMISSION_GRANTED
+            return if (hasActivity) PermissionStatus.GRANTED else PermissionStatus.DENIED
+        }
+        return PermissionStatus.GRANTED
+    }
 
     return PermissionStatus.DENIED
 }

@@ -1,12 +1,20 @@
 package io.anchorkmp.core
 
 import platform.CoreLocation.*
+import platform.CoreMotion.*
+import platform.Foundation.NSDate
+import platform.Foundation.NSOperationQueue
 import platform.darwin.NSObject
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 import kotlinx.cinterop.ExperimentalForeignApi
 
 internal actual fun platformPermissionCheck(scope: PermissionScope): PermissionStatus {
+    if (scope == PermissionScope.MOTION) {
+        val status = CMMotionActivityManager.authorizationStatus()
+        return mapMotionStatus(status)
+    }
+    
     val status = CLLocationManager.authorizationStatus()
     return mapIosStatus(status, scope)
 }
@@ -16,6 +24,18 @@ internal actual suspend fun platformPermissionRequest(scope: PermissionScope): P
     val currentStatus = platformPermissionCheck(scope)
     if (currentStatus == PermissionStatus.GRANTED) {
         cont.resume(PermissionStatus.GRANTED)
+        return@suspendCoroutine
+    }
+    
+    if (scope == PermissionScope.MOTION) {
+        val manager = CMMotionActivityManager()
+        val now = NSDate()
+        manager.queryActivityStartingFromDate(now, now, NSOperationQueue.mainQueue) { _, error ->
+            // This callback is invoked after user decision (or immediately if already decided)
+            // Error code 105 (CMErrorMotionActivityNotAuthorized) indicates denial
+            val newStatus = CMMotionActivityManager.authorizationStatus()
+            cont.resume(mapMotionStatus(newStatus))
+        }
         return@suspendCoroutine
     }
     
@@ -59,6 +79,16 @@ private fun mapIosStatus(status: CLAuthorizationStatus, scope: PermissionScope):
         }
         kCLAuthorizationStatusDenied -> PermissionStatus.PERMANENTLY_DENIED
         kCLAuthorizationStatusRestricted -> PermissionStatus.PERMANENTLY_DENIED
+        else -> PermissionStatus.NOT_DETERMINED
+    }
+}
+
+private fun mapMotionStatus(status: CMAuthorizationStatus): PermissionStatus {
+    return when (status) {
+        CMAuthorizationStatusAuthorized -> PermissionStatus.GRANTED
+        CMAuthorizationStatusDenied -> PermissionStatus.PERMANENTLY_DENIED
+        CMAuthorizationStatusRestricted -> PermissionStatus.PERMANENTLY_DENIED
+        CMAuthorizationStatusNotDetermined -> PermissionStatus.NOT_DETERMINED
         else -> PermissionStatus.NOT_DETERMINED
     }
 }

@@ -5,7 +5,10 @@ enum class PermissionScope {
     FOREGROUND,
     
     /** Continuous tracking (Android: Background, iOS: Always) */
-    BACKGROUND
+    BACKGROUND,
+    
+    /** Activity Recognition (Android: Activity Recognition, iOS: Motion) */
+    MOTION
 }
 
 enum class PermissionStatus {
