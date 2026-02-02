@@ -20,7 +20,7 @@ Just pure Kotlin and Swift performance for modern Android & iOS apps.
 *   **Cross-Platform:** Shared API for Android and iOS.
 *   **Always Background:** Designed specifically for reliable background location updates.
 *   **Platform Specific Tuning:** Granular control over Android's Priority and iOS's Accuracy and Activity types.
-*   **Modern API:** Built with Kotlin Coroutines and Flow.
+*   **Modern API:** Built with Kotlin DSL, Coroutines and Flow.
 
 ## Installation
 
