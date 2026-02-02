@@ -64,7 +64,8 @@ class AnchorConfig private constructor(
     data class IosConfig(
         val desiredAccuracy: IosAccuracy,
         val autoPause: Boolean,
-        val activityType: IosActivityType
+        val activityType: IosActivityType,
+        val displayBackgroundLocationIndicator: Boolean
     )
 
     companion object {
@@ -84,7 +85,8 @@ class AnchorConfig private constructor(
         private var iosConfig = IosConfig(
             desiredAccuracy = IosAccuracy.BEST,
             autoPause = true,
-            activityType = IosActivityType.OTHER
+            activityType = IosActivityType.OTHER,
+            displayBackgroundLocationIndicator = true
         )
 
         fun android(block: AndroidBuilder.() -> Unit) {
@@ -138,7 +140,9 @@ class AnchorConfig private constructor(
         var desiredAccuracy: IosAccuracy = defaults.desiredAccuracy
         var autoPause: Boolean = defaults.autoPause
         var activityType: IosActivityType = defaults.activityType
-        fun build() = IosConfig(desiredAccuracy, autoPause, activityType)
+        var displayBackgroundLocationIndicator: Boolean = defaults.displayBackgroundLocationIndicator
+        
+        fun build() = IosConfig(desiredAccuracy, autoPause, activityType, displayBackgroundLocationIndicator)
     }
 
     fun toBuilder(): Builder {

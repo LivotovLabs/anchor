@@ -64,7 +64,38 @@ No manual setup is required. The library includes the necessary permissions and 
 ## Usage
 
 ### 1. Configure and Initialize
-... (omitted for brevity) ...
+
+Initialize `Anchor` with your configuration, typically in your application startup.
+
+```kotlin
+import io.anchorkmp.core.*
+import kotlin.time.Duration.Companion.seconds
+
+val config = AnchorConfig.build {
+    trackActivity = true // Enable activity recognition. Default: false
+    minUpdateDistanceMeters = 10.0 // Min distance between updates. Default: 0.0
+
+    android {
+        updateInterval = 10.seconds // Frequency of updates. Default: 10.seconds
+        priority = AndroidPriority.HIGH_ACCURACY // Location priority. Default: BALANCED
+        
+        notification {
+            title = "Tracking Active" // Notification title. Default: "Tracking Active"
+            body = "We are tracking your location" // Notification body. Default: "Location tracking is running"
+            iconName = "my_custom_icon" // Resource name. Default: "anchor_notification_icon"
+        }
+    }
+    
+    ios {
+        desiredAccuracy = IosAccuracy.BEST // Location accuracy. Default: BEST
+        autoPause = true // Auto-pause updates. Default: true
+        activityType = IosActivityType.OTHER // Activity type. Default: OTHER
+        displayBackgroundLocationIndicator = true // Show blue bar. Default: true
+    }
+}
+
+Anchor.init(config)
+```
 ### 2. Check and Request Permissions
 
 Anchor provides a clean coroutine-based API for handling permissions.
