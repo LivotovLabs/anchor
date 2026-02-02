@@ -38,7 +38,7 @@ commonMain.dependencies {
 
 No manual setup is required. The library includes the necessary permissions and initializes automatically.
 
-> **Note:** You must still request the location permissions (and `ACTIVITY_RECOGNITION` on Android 10+) from the user at runtime before starting tracking.
+> **Note:** You must still request the location permissions (and `ACTIVITY_RECOGNITION` on Android 10+, and `POST_NOTIFICATIONS` on Android 13+) from the user at runtime before starting tracking.
 
 ### iOS
 
@@ -49,49 +49,22 @@ No manual setup is required. The library includes the necessary permissions and 
     <string>We need your location to track your journey.</string>
     <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
     <string>We need your location to track your journey even in the background.</string>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>We need your location to track your journey even in the background.</string>
     <key>NSMotionUsageDescription</key>
     <string>We need access to motion data to detect if you are walking, running, or driving.</string>
     <key>UIBackgroundModes</key>
     <array>
         <string>location</string>
+        <string>fetch</string>
+        <string>processing</string>
     </array>
     ```
 
 ## Usage
 
 ### 1. Configure and Initialize
-
-Initialize `Anchor` with your configuration, typically in your application startup.
-
-```kotlin
-import io.anchorkmp.core.*
-import kotlin.time.Duration.Companion.seconds
-
-val config = AnchorConfig.build {
-    trackActivity = true
-    minUpdateDistanceMeters = 10.0
-
-    android {
-        updateInterval = 10.seconds
-        priority = AndroidPriority.HIGH_ACCURACY
-        
-        notification {
-            title = "Tracking Active"
-            body = "We are tracking your location"
-            iconName = "my_custom_icon"
-        }
-    }
-    
-    ios {
-        desiredAccuracy = IosAccuracy.BEST
-        autoPause = true
-        activityType = IosActivityType.OTHER
-    }
-}
-
-Anchor.init(config)
-```
-
+... (omitted for brevity) ...
 ### 2. Check and Request Permissions
 
 Anchor provides a clean coroutine-based API for handling permissions.
@@ -99,18 +72,21 @@ Anchor provides a clean coroutine-based API for handling permissions.
 ```kotlin
 // In your ViewModel or coroutine scope
 scope.launch {
+    // Request basic permissions (suspends until user decides)
+    Anchor.requestPermission(PermissionScope.NOTIFICATIONS)
+    Anchor.requestPermission(PermissionScope.MOTION)
+
     // Check if everything is ready based on your config
     if (Anchor.isReady) {
         Anchor.startTracking()
     } else {
-        // Request permissions (suspends until user decides)
+        // Request background location
         val result = Anchor.requestPermission(PermissionScope.BACKGROUND)
         
         if (result == PermissionStatus.GRANTED) {
             Anchor.startTracking()
         } else {
             println("Permission denied")
-            // Handle denial (e.g. show settings button if PERMANENTLY_DENIED)
         }
     }
 }

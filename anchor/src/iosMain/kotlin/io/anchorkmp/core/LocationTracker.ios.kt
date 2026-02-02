@@ -50,6 +50,7 @@ internal class IosLocationTrackerEngine : LocationTrackerEngine {
         locationManager.distanceFilter = if (config.minUpdateDistanceMeters == 0.0) kCLDistanceFilterNone else config.minUpdateDistanceMeters
         
         locationManager.allowsBackgroundLocationUpdates = true
+        locationManager.showsBackgroundLocationIndicator = true
         locationManager.pausesLocationUpdatesAutomatically = config.ios.autoPause
         locationManager.activityType = when(config.ios.activityType) {
             IosActivityType.OTHER -> CLActivityTypeOther
