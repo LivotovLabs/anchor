@@ -82,7 +82,9 @@ internal class AndroidLocationTrackerEngine : LocationTrackerEngine {
     private fun startActivityUpdates(config: AnchorConfig) {
         stopActivityUpdates()
         
-        val intent = Intent("io.anchorkmp.core.ACTION_ACTIVITY_UPDATE")
+        val intent = Intent("io.anchorkmp.core.ACTION_ACTIVITY_UPDATE").apply {
+            setPackage(context.packageName)
+        }
         val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
         } else {

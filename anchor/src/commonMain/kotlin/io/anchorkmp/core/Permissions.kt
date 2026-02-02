@@ -8,7 +8,10 @@ enum class PermissionScope {
     BACKGROUND,
     
     /** Activity Recognition (Android: Activity Recognition, iOS: Motion) */
-    MOTION
+    MOTION,
+
+    /** Show notifications (Android 13+: POST_NOTIFICATIONS, iOS: UNUserNotificationCenter) */
+    NOTIFICATIONS
 }
 
 enum class PermissionStatus {

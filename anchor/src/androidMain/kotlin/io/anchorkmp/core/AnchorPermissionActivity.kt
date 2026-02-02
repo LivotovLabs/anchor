@@ -27,6 +27,7 @@ internal object RequestManager {
 class AnchorPermissionActivity : Activity() {
 
     private var requestId: Int = -1
+    private var requestedScope: PermissionScope? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,7 +41,24 @@ class AnchorPermissionActivity : Activity() {
             return
         }
 
-        val scope = PermissionScope.valueOf(scopeName)
+        requestedScope = PermissionScope.valueOf(scopeName)
+        handleRequest(requestedScope!!)
+    }
+
+    private fun handleRequest(scope: PermissionScope) {
+        if (scope == PermissionScope.BACKGROUND) {
+            // Check if we already have foreground permissions
+            val hasFine = androidx.core.content.ContextCompat.checkSelfPermission(
+                this, 
+                android.Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+            
+            if (!hasFine) {
+                // Request foreground first
+                requestPermissionsForScope(PermissionScope.FOREGROUND)
+                return
+            }
+        }
         requestPermissionsForScope(scope)
     }
 
@@ -60,6 +78,13 @@ class AnchorPermissionActivity : Activity() {
             PermissionScope.MOTION -> {
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
                     arrayOf(android.Manifest.permission.ACTIVITY_RECOGNITION)
+                } else {
+                    arrayOf()
+                }
+            }
+            PermissionScope.NOTIFICATIONS -> {
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+                    arrayOf(android.Manifest.permission.POST_NOTIFICATIONS)
                 } else {
                     arrayOf()
                 }
@@ -84,6 +109,23 @@ class AnchorPermissionActivity : Activity() {
         if (requestCode == REQUEST_CODE) {
             val allGranted = grantResults.isNotEmpty() && grantResults.all { it == PackageManager.PERMISSION_GRANTED }
             if (allGranted) {
+                // If we were requesting FOREGROUND but the original goal was BACKGROUND, continue to BACKGROUND
+                if (requestedScope == PermissionScope.BACKGROUND) {
+                     val hasBackground = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+                        androidx.core.content.ContextCompat.checkSelfPermission(
+                            this,
+                            android.Manifest.permission.ACCESS_BACKGROUND_LOCATION
+                        ) == PackageManager.PERMISSION_GRANTED
+                     } else {
+                         true
+                     }
+                     
+                     if (!hasBackground) {
+                         requestPermissionsForScope(PermissionScope.BACKGROUND)
+                         return
+                     }
+                }
+                
                 reportResult(PermissionStatus.GRANTED)
             } else {
                 // Check for permanently denied (Rationale logic omitted for brevity, mapping simplified)

@@ -42,6 +42,14 @@ internal actual fun platformPermissionCheck(scope: PermissionScope): PermissionS
         return PermissionStatus.GRANTED
     }
 
+    if (scope == PermissionScope.NOTIFICATIONS) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            val hasNotifications = ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
+            return if (hasNotifications) PermissionStatus.GRANTED else PermissionStatus.DENIED
+        }
+        return PermissionStatus.GRANTED
+    }
+
     return PermissionStatus.DENIED
 }
 

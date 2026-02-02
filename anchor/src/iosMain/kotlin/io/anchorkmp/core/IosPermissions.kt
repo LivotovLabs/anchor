@@ -5,11 +5,17 @@ import platform.CoreMotion.*
 import platform.Foundation.NSDate
 import platform.Foundation.NSOperationQueue
 import platform.darwin.NSObject
+import platform.UserNotifications.*
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 import kotlinx.cinterop.ExperimentalForeignApi
 
 internal actual fun platformPermissionCheck(scope: PermissionScope): PermissionStatus {
+    if (scope == PermissionScope.NOTIFICATIONS) {
+        // Synchronous check is not possible for UNUserNotificationCenter.
+        return PermissionStatus.NOT_DETERMINED
+    }
+
     if (scope == PermissionScope.MOTION) {
         val status = CMMotionActivityManager.authorizationStatus()
         return mapMotionStatus(status)
@@ -24,6 +30,15 @@ internal actual suspend fun platformPermissionRequest(scope: PermissionScope): P
     val currentStatus = platformPermissionCheck(scope)
     if (currentStatus == PermissionStatus.GRANTED) {
         cont.resume(PermissionStatus.GRANTED)
+        return@suspendCoroutine
+    }
+
+    if (scope == PermissionScope.NOTIFICATIONS) {
+        UNUserNotificationCenter.currentNotificationCenter().requestAuthorizationWithOptions(
+            UNAuthorizationOptionAlert or UNAuthorizationOptionSound or UNAuthorizationOptionBadge
+        ) { granted, _ ->
+            cont.resume(if (granted) PermissionStatus.GRANTED else PermissionStatus.DENIED)
+        }
         return@suspendCoroutine
     }
     
