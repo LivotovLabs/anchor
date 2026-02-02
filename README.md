@@ -1,6 +1,7 @@
 # ⚓ Anchor: KMP Background Geolocation
 
 [![Status](https://img.shields.io/badge/status-in%20development-orange)](https://github.com/LivotovLabs/anchor)
+[![Maven Central](https://img.shields.io/maven-central/v/io.anchorkmp/core)](https://central.sonatype.com/artifact/io.anchorkmp/core)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Platform](https://img.shields.io/badge/platform-android%20|%20ios-lightgrey)](https://anchorkmp.io)
 
@@ -28,7 +29,7 @@ Add the dependency to your common module's `build.gradle.kts`:
 
 ```kotlin
 commonMain.dependencies {
-    implementation("io.anchorkmp:core:1.0.0")
+    implementation("io.anchorkmp:core:0.0.1")
 }
 ```
 

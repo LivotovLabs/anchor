@@ -55,12 +55,12 @@ android {
 //https://www.jetbrains.com/help/kotlin-multiplatform-dev/multiplatform-publish-libraries.html
 mavenPublishing {
     publishToMavenCentral()
-    coordinates("io.anchorkmp", "core", "1.0.0")
+    coordinates("io.anchorkmp", "core", "0.0.1")
 
     pom {
-        name = "Anchor"
-        description = "Kotlin Multiplatform library"
-        url = "github url" //todo
+        name = "Anchor KMP"
+        description = "Kotlin Multiplatform Background Geolocation Library"
+        url = "https://anchorkmp.io"
 
         licenses {
             license {
@@ -71,15 +71,20 @@ mavenPublishing {
 
         developers {
             developer {
-                id = "" //todo
-                name = "" //todo
-                email = "" //todo
+                id = "LivotovLabs"
+                name = "Livotov Labs Ltd."
+                email = "labs@livotov.eu"
             }
         }
 
         scm {
-            url = "github url" //todo
+            url = "https://github.com/LivotovLabs/anchor"
         }
     }
-    if (project.hasProperty("signing.keyId")) signAllPublications()
+    
+    if (project.hasProperty("signing.keyId") && 
+        project.hasProperty("signing.password") && 
+        (project.hasProperty("signing.secretKeyRingFile") || project.hasProperty("signing.key"))) {
+        signAllPublications()
+    }
 }
