@@ -10,6 +10,8 @@ androidx-activityCompose = "1.10.1"
 play-services-location = "21.3.0"
 multiplatform-settings = "1.2.0"
 kotlinx-datetime = "0.6.0"
+google-maps-compose = "6.4.1"
+play-services-maps = "19.0.0"
 
 [libraries]
 
@@ -23,6 +25,8 @@ play-services-location = { module = "com.google.android.gms:play-services-locati
 multiplatform-settings = { module = "com.russhwolf:multiplatform-settings", version.ref = "multiplatform-settings" }
 multiplatform-settings-no-arg = { module = "com.russhwolf:multiplatform-settings-no-arg", version.ref = "multiplatform-settings" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
+google-maps-compose = { module = "com.google.maps.android:maps-compose", version.ref = "google-maps-compose" }
+play-services-maps = { module = "com.google.android.gms:play-services-maps", version.ref = "play-services-maps" }
 
 [plugins]
 

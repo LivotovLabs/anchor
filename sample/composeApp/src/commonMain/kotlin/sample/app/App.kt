@@ -208,7 +208,15 @@ fun App() {
             Box(Modifier.padding(padding).fillMaxSize()) {
                 when (currentTab) {
                     AppTab.Locations -> LocationsList(manager.locations)
-                    AppTab.Map -> LocationMap(manager.locations)
+                    AppTab.Map -> {
+                        if (manager.locations.isEmpty()) {
+                            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                                Text("No locations yet")
+                            }
+                        } else {
+                            NativeMap(manager.locations, Modifier.fillMaxSize())
+                        }
+                    }
                 }
             }
         }
@@ -234,47 +242,6 @@ fun LocationsList(locations: List<StoredLocation>) {
                     if (loc.bearing != null) Text("Bearing: ${loc.bearing}°")
                     if (loc.activity != null) Text("Activity: ${loc.activity}")
                 }
-            }
-        }
-    }
-}
-
-@Composable
-fun LocationMap(locations: List<StoredLocation>, modifier: Modifier = Modifier) {
-    Box(
-        modifier = modifier
-            .fillMaxSize()
-            .background(Color.LightGray)
-            .padding(1.dp)
-            .background(Color.White)
-    ) {
-        if (locations.isEmpty()) {
-            Text("No locations yet", Modifier.align(Alignment.Center))
-        } else {
-            Canvas(Modifier.fillMaxSize().padding(16.dp)) {
-                val lats = locations.map { it.lat }
-                val lons = locations.map { it.lon }
-                val minLat = lats.minOrNull() ?: 0.0
-                val maxLat = lats.maxOrNull() ?: 0.0
-                val minLon = lons.minOrNull() ?: 0.0
-                val maxLon = lons.maxOrNull() ?: 0.0
-                
-                val latRange = max(maxLat - minLat, 0.0001)
-                val lonRange = max(maxLon - minLon, 0.0001)
-                
-                locations.forEach { loc ->
-                    // Normalize 0..1
-                    val x = ((loc.lon - minLon) / lonRange).toFloat() * size.width
-                    val y = size.height - ((loc.lat - minLat) / latRange).toFloat() * size.height
-                    
-                    drawCircle(Color.Red, radius = 4.dp.toPx(), center = Offset(x, y))
-                }
-                
-                // Draw current position separately
-                val last = locations.last()
-                val x = ((last.lon - minLon) / lonRange).toFloat() * size.width
-                val y = size.height - ((last.lat - minLat) / latRange).toFloat() * size.height
-                drawCircle(Color.Blue, radius = 6.dp.toPx(), center = Offset(x, y))
             }
         }
     }

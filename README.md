@@ -162,6 +162,32 @@ scope.launch {
 }
 ```
 
+## Demo Application
+
+This repository includes a sample Compose Multiplatform application in the `sample/` directory that demonstrates background tracking, activity detection, and native map integration.
+
+### Android Setup (Google Maps)
+
+The Android sample uses Google Maps. To provide your API Key:
+
+1. Create or open `local.properties` in the project root directory.
+2. Add your Google Maps API Key:
+   ```properties
+   MAPS_API_KEY=AIzaSy...your_key...
+   ```
+3. Run the application:
+   ```bash
+   ./gradlew :sample:composeApp:installDebug
+   ```
+
+### iOS Setup (Apple Maps)
+
+The iOS sample uses native Apple Maps (MapKit) and requires no additional API keys.
+
+1. Open `sample/iosApp/iosApp.xcodeproj` in Xcode.
+2. Select your target device or simulator.
+3. Build and Run.
+
 ## License
 
 This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.

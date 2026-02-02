@@ -7,6 +7,9 @@
             android:icon="@android:mipmap/sym_def_app_icon"
             android:label="sample"
             android:theme="@android:style/Theme.Material.NoActionBar">
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="${MAPS_API_KEY}" />
         <activity
             android:name=".AppActivity"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"

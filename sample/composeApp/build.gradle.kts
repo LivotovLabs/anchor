@@ -6,6 +6,16 @@ plugins {
     alias(libs.plugins.kotlinx.serialization)
 }
 
+import java.util.Properties
+
+val localProperties = Properties()
+val localPropertiesFile = rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localProperties.load(localPropertiesFile.inputStream())
+}
+
+val googleMapsApiKey = localProperties.getProperty("MAPS_API_KEY") ?: "YOUR_API_KEY"
+
 kotlin {
     jvmToolchain(17)
 
@@ -18,6 +28,7 @@ kotlin {
         it.binaries.framework {
             baseName = "ComposeApp"
             isStatic = true
+            linkerOpts("-framework", "MapKit")
         }
     }
 
@@ -37,6 +48,8 @@ kotlin {
 
         androidMain.dependencies {
             implementation(libs.androidx.activityCompose)
+            implementation(libs.google.maps.compose)
+            implementation(libs.play.services.maps)
         }
 
     }
@@ -53,6 +66,8 @@ android {
         applicationId = "sample.app.androidApp"
         versionCode = 1
         versionName = "1.0.0"
+        
+        manifestPlaceholders["MAPS_API_KEY"] = googleMapsApiKey
     }
 }
 
