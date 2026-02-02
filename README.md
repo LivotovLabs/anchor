@@ -1,5 +1,3 @@
-# Anchor KMP Core
-
 # ⚓ Anchor: KMP Background Geolocation
 
 [![Status](https://img.shields.io/badge/status-in%20development-orange)](https://github.com/LivotovLabs/anchor)
