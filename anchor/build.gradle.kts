@@ -26,6 +26,7 @@ kotlin {
 
         androidMain.dependencies {
             implementation(libs.kotlinx.coroutines.android)
+            implementation(libs.play.services.location)
         }
 
     }
@@ -42,7 +43,7 @@ kotlin {
 }
 
 android {
-    namespace = "labs.livotov.eu"
+    namespace = "io.anchorkmp.core"
     compileSdk = 35
 
     defaultConfig {
@@ -54,7 +55,7 @@ android {
 //https://www.jetbrains.com/help/kotlin-multiplatform-dev/multiplatform-publish-libraries.html
 mavenPublishing {
     publishToMavenCentral()
-    coordinates("labs.livotov.eu", "anchor", "1.0.0")
+    coordinates("io.anchorkmp", "core", "1.0.0")
 
     pom {
         name = "Anchor"
@@ -63,8 +64,8 @@ mavenPublishing {
 
         licenses {
             license {
-                name = "MIT"
-                url = "https://opensource.org/licenses/MIT"
+                name = "Apache-2.0"
+                url = "https://www.apache.org/licenses/LICENSE-2.0.txt"
             }
         }
 

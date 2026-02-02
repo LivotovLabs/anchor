@@ -8,7 +8,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import labs.livotov.eu.getFibonacciNumbers
 
 @Composable
 fun App() {
@@ -16,6 +15,6 @@ fun App() {
         modifier = Modifier.fillMaxSize().background(Color.White),
         contentAlignment = Alignment.Center
     ) {
-        BasicText("getFibonacciNumbers(7)=${getFibonacciNumbers(7).joinToString(", ")}")
+        BasicText("Anchor KMP Core")
     }
 }
