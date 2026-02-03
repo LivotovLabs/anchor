@@ -3,6 +3,11 @@ import ComposeApp
 
 @main
 struct ComposeApp: App {
+    
+    init() {
+        LocationManager.shared.monitor()
+    }
+    
     var body: some Scene {
         WindowGroup {
             ContentView().ignoresSafeArea(.all)

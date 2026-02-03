@@ -165,6 +165,8 @@ scope.launch {
 }
 ```
 
+> **💡 Pro Tip:** For robust background tracking that survives process death, initialize Anchor and subscribe to updates in your `Application` class, not your Activity/UI. See [Best Practices](docs/Writerside/topics/Best-Practices.md).
+
 ---
 
 ## 📱 Demo Application

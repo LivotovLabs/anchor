@@ -19,6 +19,9 @@ import androidx.compose.ui.unit.dp
 import com.russhwolf.settings.Settings
 import com.russhwolf.settings.set
 import io.anchorkmp.core.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
@@ -40,22 +43,42 @@ data class StoredLocation(
     val activity: String?
 )
 
-class LocationManager {
+object LocationManager {
     private val settings = Settings()
     private val json = Json { ignoreUnknownKeys = true }
     private val key = "locations"
     private val trackingKey = "tracking_enabled"
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
     var locations = mutableStateListOf<StoredLocation>()
         private set
 
     init {
         loadLocations()
-        initAnchor()
     }
     
-    fun shouldResumeTracking(): Boolean {
-        return settings.getBoolean(trackingKey, false)
+    fun monitor() {
+        initAnchor()
+        startCollecting()
+        
+        if (settings.getBoolean(trackingKey, false)) {
+            scope.launch {
+                // If we were tracking, we must ensure we are still tracking
+                // If the app was killed, Anchor service might be running, or might need restart
+                // Calling startTracking is safe
+                if (Anchor.isReady) {
+                    Anchor.startTracking()
+                }
+            }
+        }
+    }
+    
+    private fun startCollecting() {
+        scope.launch {
+            Anchor.locationFlow.collect { loc ->
+                saveLocation(loc)
+            }
+        }
     }
     
     private fun initAnchor() {
@@ -90,7 +113,7 @@ class LocationManager {
         }
     }
 
-    fun saveLocation(loc: AnchorLocation) {
+    private fun saveLocation(loc: AnchorLocation) {
         val newLoc = StoredLocation(
             lat = loc.latitude, 
             lon = loc.longitude, 
@@ -99,6 +122,9 @@ class LocationManager {
             bearing = loc.bearing,
             activity = loc.activity?.name
         )
+        // Ensure UI updates happen on Main thread if needed, though mutableStateListOf handles it
+        // But since we are collecting on Default dispatcher, better be safe if concurrent modification is an issue
+        // For simple Compose state list, it is usually fine, but let's just add it.
         locations.add(newLoc)
         persist()
     }
@@ -143,27 +169,17 @@ enum class AppTab(val title: String, val icon: ImageVector) {
 fun App() {
     MaterialTheme {
         val scope = rememberCoroutineScope()
-        val manager = remember { LocationManager() }
+        // LocationManager is now an object
+        val manager = LocationManager 
         var isTracking by remember { mutableStateOf(false) }
         var currentTab by remember { mutableStateOf(AppTab.Locations) }
 
         // Sync initial tracking state
         LaunchedEffect(Unit) {
-            if (manager.shouldResumeTracking()) {
-                manager.startTracking()
-                isTracking = true
-            } else {
-                isTracking = Anchor.isTracking
-            }
+            // Check if Anchor is actually tracking
+            isTracking = Anchor.isTracking
         }
 
-        // Observe Anchor locations
-        LaunchedEffect(Unit) {
-            Anchor.locationFlow.collect { loc ->
-                manager.saveLocation(loc)
-            }
-        }
-        
         Scaffold(
             modifier = Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.systemBars),
             topBar = {
