@@ -44,6 +44,7 @@ class LocationManager {
     private val settings = Settings()
     private val json = Json { ignoreUnknownKeys = true }
     private val key = "locations"
+    private val trackingKey = "tracking_enabled"
 
     var locations = mutableStateListOf<StoredLocation>()
         private set
@@ -51,6 +52,10 @@ class LocationManager {
     init {
         loadLocations()
         initAnchor()
+    }
+    
+    fun shouldResumeTracking(): Boolean {
+        return settings.getBoolean(trackingKey, false)
     }
     
     private fun initAnchor() {
@@ -117,13 +122,16 @@ class LocationManager {
         val status = Anchor.requestPermission(PermissionScope.BACKGROUND)
         if (status == PermissionStatus.GRANTED) {
             Anchor.startTracking()
+            settings.putBoolean(trackingKey, true)
         } else {
             println("Permission denied: $status")
+            settings.putBoolean(trackingKey, false)
         }
     }
 
     suspend fun stopTracking() {
         Anchor.stopTracking()
+        settings.putBoolean(trackingKey, false)
     }
 }
 
@@ -142,7 +150,12 @@ fun App() {
 
         // Sync initial tracking state
         LaunchedEffect(Unit) {
-            isTracking = Anchor.isTracking
+            if (manager.shouldResumeTracking()) {
+                manager.startTracking()
+                isTracking = true
+            } else {
+                isTracking = Anchor.isTracking
+            }
         }
 
         // Observe Anchor locations
