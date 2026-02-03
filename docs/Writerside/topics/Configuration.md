@@ -4,10 +4,10 @@ AnchorKMP is highly configurable to suit different use cases, from high-precisio
 
 ## Creating a Configuration
 
-You create a configuration object using the `AnchorConfig.build` DSL builder. This allows you to set common options and platform-specific overrides.
+You create a configuration object using the `Anchor.init` DSL. This allows you to set common options and platform-specific overrides.
 
 ```kotlin
-val config = AnchorConfig.build {
+Anchor.init {
     // Common Settings
     minUpdateDistanceMeters = 10.0 // Minimum distance between updates
     trackActivity = true           // Enable activity recognition (still/walking/etc)

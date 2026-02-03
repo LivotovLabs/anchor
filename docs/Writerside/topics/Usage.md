@@ -7,11 +7,9 @@ Once you have [setup](Setup.md) the project and defined your [configuration](Con
 You must initialize the `Anchor` singleton with your configuration before using any other features. This is typically done in your `Application` class or main entry point.
 
 ```kotlin
-val config = AnchorConfig.build {
+Anchor.init {
     // ... your configuration
 }
-
-Anchor.init(config)
 ```
 
 ## Permissions

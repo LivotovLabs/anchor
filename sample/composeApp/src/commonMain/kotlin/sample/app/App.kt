@@ -59,7 +59,7 @@ class LocationManager {
     }
     
     private fun initAnchor() {
-         val config = AnchorConfig.build {
+        Anchor.init {
             android {
                 updateInterval = 5.seconds
                 priority = AndroidPriority.HIGH_ACCURACY
@@ -75,7 +75,6 @@ class LocationManager {
             }
             trackActivity = true
         }
-        Anchor.init(config)
     }
 
     private fun loadLocations() {

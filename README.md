@@ -104,7 +104,7 @@ Initialize Anchor in your application startup logic.
 import io.anchorkmp.core.*
 import kotlin.time.Duration.Companion.seconds
 
-val config = AnchorConfig.build {
+Anchor.init {
     // Shared Options
     trackActivity = true            // Enable activity recognition (walking, driving, etc.)
     minUpdateDistanceMeters = 10.0  // Minimum distance before an update is triggered
@@ -129,8 +129,6 @@ val config = AnchorConfig.build {
         displayBackgroundLocationIndicator = true // Show blue pill in status bar
     }
 }
-
-Anchor.init(config)
 ```
 
 ### 2. Permissions & Tracking

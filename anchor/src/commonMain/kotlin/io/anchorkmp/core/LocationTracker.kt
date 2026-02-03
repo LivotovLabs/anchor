@@ -30,6 +30,10 @@ object Anchor {
         _configState.value = config
     }
 
+    fun init(block: AnchorConfig.Builder.() -> Unit) {
+        init(AnchorConfig.build(block))
+    }
+
     val locationFlow: Flow<AnchorLocation>
         get() = engine.locationFlow
         
