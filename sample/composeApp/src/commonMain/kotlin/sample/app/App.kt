@@ -84,7 +84,7 @@ object LocationManager {
     private fun initAnchor() {
         Anchor.init {
             android {
-                updateInterval = 5.seconds
+                updateInterval = 45.seconds
                 priority = AndroidPriority.HIGH_ACCURACY
                 notification {
                     title = "Demo Tracker"
