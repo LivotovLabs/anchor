@@ -84,7 +84,7 @@ object LocationManager {
     private fun initAnchor() {
         Anchor.init {
             android {
-                updateInterval = 45.seconds
+                updateInterval = 30.seconds
                 priority = AndroidPriority.HIGH_ACCURACY
                 notification {
                     title = "Demo Tracker"
@@ -96,6 +96,7 @@ object LocationManager {
                 activityType = IosActivityType.AUTOMOTIVE_NAVIGATION
                 autoPause = false
             }
+            minUpdateDistanceMeters = 10.0
             trackActivity = true
         }
     }
@@ -266,7 +267,10 @@ fun LocationsList(locations: List<StoredLocation>) {
                     Text("Time: ${date.date} ${date.time.hour}:${date.time.minute}:${date.time.second}")
                     Text("Lat: ${loc.lat}, Lon: ${loc.lon}")
                     Text("Lon: ${loc.lon}")
-                    if (loc.speed != null) Text("Speed: ${loc.speed} m/s")
+                    if (loc.speed != null) {
+                        val speedKmH = (loc.speed * 3.6 * 10).toInt() / 10.0
+                        Text("Speed: $speedKmH km/h")
+                    }
                     if (loc.bearing != null) Text("Bearing: ${loc.bearing}°")
                     if (loc.activity != null) Text("Activity: ${loc.activity}")
                 }
