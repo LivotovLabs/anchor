@@ -8,9 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		A93A953B29CC810C00F8E227 /* iosApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A93A953A29CC810C00F8E227 /* iosApp.swift */; };
+		A93A955129CC810C00F8E227 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A93A955029CC810C00F8E227 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A93A955029CC810C00F8E227 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A93A953729CC810C00F8E227 /* Multiplatform App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Multiplatform App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A93A953A29CC810C00F8E227 /* iosApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iosApp.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -24,6 +26,17 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A93A955229CC810C00F8E227 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A93A955129CC810C00F8E227 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXGroup section */
 		A93A952E29CC810C00F8E227 = {
@@ -46,6 +59,7 @@
 		A93A953929CC810C00F8E227 /* iosApp */ = {
 			isa = PBXGroup;
 			children = (
+				A93A955029CC810C00F8E227 /* Assets.xcassets */,
 				A93A953A29CC810C00F8E227 /* iosApp.swift */,
 			);
 			path = iosApp;
@@ -68,6 +82,7 @@
 				A9D80A052AAB5CDE006C8738 /* ShellScript */,
 				A93A953329CC810C00F8E227 /* Sources */,
 				A93A953429CC810C00F8E227 /* Frameworks */,
+				A93A955229CC810C00F8E227 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -266,6 +281,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = iosApp/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Anchor;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "We need your location to track you in the background.";
 				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "We need your location to track you in the background.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We need your location to show it on the map.";
@@ -294,6 +310,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = iosApp/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Anchor;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "We need your location to track you in the background.";
 				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "We need your location to track you in the background.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We need your location to show it on the map.";

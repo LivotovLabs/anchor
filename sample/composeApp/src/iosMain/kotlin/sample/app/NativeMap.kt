@@ -39,6 +39,7 @@ actual fun NativeMap(locations: List<StoredLocation>, modifier: Modifier) {
         },
         modifier = modifier,
         update = { mapView ->
+            println("NativeMap update: ${locations.size} locations")
             mapView.removeAnnotations(mapView.annotations)
             locations.forEach { loc ->
                 val color = when (loc.activity) {
@@ -89,6 +90,9 @@ class MapDelegate : NSObject(), MKMapViewDelegateProtocol {
             }
             
             view.markerTintColor = viewForAnnotation.color
+            view.clusteringIdentifier = null // Explicitly disable clustering
+            view.displayPriority = MKFeatureDisplayPriorityRequired
+            // view.collisionMode = 2L as MKAnnotationViewCollisionMode // Causing crash
             
             val label = UILabel()
             label.numberOfLines = 0

@@ -59,6 +59,8 @@ object LocationManager {
     
     fun monitor() {
         initAnchor()
+        // Force initialization of engine on the calling thread (Main) to ensure CLLocationManager attaches to Main RunLoop
+        val ensureInit = Anchor.locationFlow
         startCollecting()
         
         if (settings.getBoolean(trackingKey, false)) {
@@ -159,6 +161,10 @@ object LocationManager {
         Anchor.stopTracking()
         settings.putBoolean(trackingKey, false)
     }
+    
+    fun isTrackingEnabled(): Boolean {
+        return settings.getBoolean(trackingKey, false)
+    }
 }
 
 enum class AppTab(val title: String, val icon: ImageVector) {
@@ -177,8 +183,8 @@ fun App() {
 
         // Sync initial tracking state
         LaunchedEffect(Unit) {
-            // Check if Anchor is actually tracking
-            isTracking = Anchor.isTracking
+            // Check if Anchor is actually tracking or if we expect it to be tracking
+            isTracking = Anchor.isTracking || manager.isTrackingEnabled()
         }
 
         Scaffold(
@@ -243,7 +249,7 @@ fun App() {
                                 Text("No locations yet")
                             }
                         } else {
-                            NativeMap(manager.locations, Modifier.fillMaxSize())
+                            NativeMap(manager.locations.toList(), Modifier.fillMaxSize())
                         }
                     }
                 }
