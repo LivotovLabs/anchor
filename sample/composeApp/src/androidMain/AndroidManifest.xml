@@ -4,7 +4,8 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
-            android:icon="@android:mipmap/sym_def_app_icon"
+            android:name=".SampleApplication"
+            android:icon="@mipmap/ic_launcher"
             android:label="sample"
             android:theme="@android:style/Theme.Material.NoActionBar">
         <meta-data

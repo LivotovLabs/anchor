@@ -22,12 +22,16 @@ object Anchor {
     internal val _configState = MutableStateFlow<AnchorConfig?>(null)
     internal val engine by lazy { createTrackerEngine() }
 
-    fun init(config: AnchorConfig) {
+    private fun init(config: AnchorConfig) {
         if (_configState.value != null) {
             println("Anchor is already initialized. Ignoring new init call.")
             return
         }
         _configState.value = config
+    }
+
+    fun init(block: AnchorConfig.Builder.() -> Unit) {
+        init(AnchorConfig.build(block))
     }
 
     val locationFlow: Flow<AnchorLocation>

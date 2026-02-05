@@ -7,6 +7,8 @@ import platform.darwin.NSObject
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import kotlinx.cinterop.useContents
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlin.concurrent.AtomicReference
@@ -35,7 +37,7 @@ internal class IosLocationTrackerEngine : LocationTrackerEngine {
         locationManager.delegate = delegate
     }
 
-    override suspend fun startTracking(config: AnchorConfig) {
+    override suspend fun startTracking(config: AnchorConfig) = withContext(Dispatchers.Main) {
         applyConfig(config)
         
         if (!_isTracking) {
@@ -72,13 +74,13 @@ internal class IosLocationTrackerEngine : LocationTrackerEngine {
         }
     }
 
-    override suspend fun stopTracking() {
+    override suspend fun stopTracking() = withContext(Dispatchers.Main) {
         locationManager.stopUpdatingLocation()
         motionActivityManager.stopActivityUpdates()
         _isTracking = false
     }
     
-    override suspend fun reconfigure(config: AnchorConfig) {
+    override suspend fun reconfigure(config: AnchorConfig) = withContext(Dispatchers.Main) {
         applyConfig(config)
     }
     
@@ -87,8 +89,9 @@ internal class IosLocationTrackerEngine : LocationTrackerEngine {
             return locationFlow.first()
         }
         
-        return suspendCoroutine { cont ->
-            val oneShotManager = CLLocationManager()
+        return withContext(Dispatchers.Main) {
+            suspendCoroutine { cont ->
+                val oneShotManager = CLLocationManager()
             oneShotManager.desiredAccuracy = config.ios.desiredAccuracy.value
             
             val delegate = object : NSObject(), CLLocationManagerDelegateProtocol {
@@ -103,8 +106,8 @@ internal class IosLocationTrackerEngine : LocationTrackerEngine {
                                 longitude = iosLocation.coordinate.useContents { longitude },
                                 altitude = iosLocation.altitude,
                                 accuracy = iosLocation.horizontalAccuracy.toFloat(),
-                                speed = iosLocation.speed.toFloat(),
-                                bearing = iosLocation.course.toFloat(),
+                                speed = if (iosLocation.speed < 0) null else iosLocation.speed.toFloat(),
+                                bearing = if (iosLocation.course < 0) null else iosLocation.course.toFloat(),
                                 timestamp = (iosLocation.timestamp.timeIntervalSince1970 * 1000).toLong(),
                                 activity = currentActivity.value
                             )
@@ -124,6 +127,7 @@ internal class IosLocationTrackerEngine : LocationTrackerEngine {
             oneShotManager.requestLocation()
         }
     }
+    }
     
     private fun mapActivity(activity: CMMotionActivity): AnchorActivityType {
         return when {
@@ -140,14 +144,15 @@ internal class IosLocationTrackerEngine : LocationTrackerEngine {
         override fun locationManager(manager: CLLocationManager, didUpdateLocations: List<*>) {
             val locations = didUpdateLocations as List<CLLocation>
             locations.lastOrNull()?.let { iosLocation ->
+                println("Anchor: Location received: ${iosLocation.coordinate.useContents { latitude }}, ${iosLocation.coordinate.useContents { longitude }}")
                 _locationFlow.tryEmit(
                     AnchorLocation(
                         latitude = iosLocation.coordinate.useContents { latitude },
                         longitude = iosLocation.coordinate.useContents { longitude },
                         altitude = iosLocation.altitude,
                         accuracy = iosLocation.horizontalAccuracy.toFloat(),
-                        speed = iosLocation.speed.toFloat(),
-                        bearing = iosLocation.course.toFloat(),
+                        speed = if (iosLocation.speed < 0) null else iosLocation.speed.toFloat(),
+                        bearing = if (iosLocation.course < 0) null else iosLocation.course.toFloat(),
                         timestamp = (iosLocation.timestamp.timeIntervalSince1970 * 1000).toLong(),
                         activity = currentActivity.value
                     )

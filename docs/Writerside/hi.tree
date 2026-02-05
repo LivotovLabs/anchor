@@ -3,9 +3,12 @@
         SYSTEM "https://resources.jetbrains.com/writerside/1.0/product-profile.dtd">
 
 <instance-profile id="hi"
-                 name="Help Instance"
-                 start-page="Default-topic.md">
+                 name="AnchorKMP"
+                 start-page="Introduction.md">
 
-    <toc-element topic="Default-topic.md"/>
     <toc-element topic="Introduction.md"/>
+    <toc-element topic="Setup.md"/>
+    <toc-element topic="Configuration.md"/>
+    <toc-element topic="Usage.md"/>
+    <toc-element topic="Best-Practices.md"/>
 </instance-profile>
