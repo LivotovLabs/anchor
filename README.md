@@ -22,7 +22,7 @@
 
 > **Anchor** is a native, Kotlin-first background geolocation library for **Kotlin Multiplatform**, designed for high performance and seamless integration in modern Android and iOS applications.
 >
-> ⚠️ **Note:** The product is currently in its final stages of development and testing. The official **v1.0 release** is expected during **February 2026**.
+> ⚠️ **Note:** The product is currently in its final stages of development and testing. The official **v1.0 release** is expected during **March 2026**.
 
 ---
 
